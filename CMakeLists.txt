@@ -82,7 +82,7 @@ if(CMAKE_C_BYTE_ORDER STREQUAL "BIG_ENDIAN")
     set(CONFIG_BIG_ENDIAN 1)
 endif()
 
-cmake_dependent_option(CONFIG_RUNTIME_CPU_DETECT "runtime CPU detection" ON "NOT APPLE" OFF)
+cmake_dependent_option(CONFIG_RUNTIME_CPU_DETECT "runtime CPU detection" OFF "NOT APPLE;NOT WIN32;NOT ANDROID" OFF)
 
 option(CONFIG_POSTPROC "post-processing" ON)
 option(CONFIG_DEQUANT_TOKENS "Dequant tokens" OFF)
