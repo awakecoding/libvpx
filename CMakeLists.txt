@@ -188,6 +188,8 @@ endif()
 
 # detect assembler configuration
 
+option(WITH_SIMD "SIMD optimizations" ON)
+
 if(VPX_ARCH_X86 OR VPX_ARCH_X86_64)
     if(WIN32)
         if(VPX_ARCH_X86_64)
@@ -212,8 +214,8 @@ if(VPX_ARCH_X86 OR VPX_ARCH_X86_64)
     set(ASM_EXT ".asm")
 endif()
 
-cmake_dependent_option(HAVE_NEON "NEON extensions" ON "VPX_ARCH_ARM" OFF)
-cmake_dependent_option(HAVE_NEON_ASM "NEON asm extensions" OFF "VPX_ARCH_ARM" OFF)
+cmake_dependent_option(HAVE_NEON "NEON extensions" ON "VPX_ARCH_ARM;WITH_SIMD" OFF)
+cmake_dependent_option(HAVE_NEON_ASM "NEON asm extensions" OFF "VPX_ARCH_ARM;WITH_SIMD" OFF)
 
 if(VPX_ARCH_ARM)
     if(HAVE_NEON_ASM)
@@ -223,19 +225,19 @@ if(VPX_ARCH_ARM)
     set(ASM_EXT ".asm.S")
 endif()
 
-cmake_dependent_option(HAVE_MMX "MMX extensions" ON "VPX_ARCH_X86 OR VPX_ARCH_X86_64" OFF)
-cmake_dependent_option(HAVE_SSE "SSE extensions" ON "VPX_ARCH_X86 OR VPX_ARCH_X86_64" OFF)
-cmake_dependent_option(HAVE_SSE2 "SSE2 extensions" ON "VPX_ARCH_X86 OR VPX_ARCH_X86_64" OFF)
-cmake_dependent_option(HAVE_SSE3 "SSE3 extensions" ON "VPX_ARCH_X86 OR VPX_ARCH_X86_64" OFF)
-cmake_dependent_option(HAVE_SSSE3 "SSSE3 extensions" ON "VPX_ARCH_X86 OR VPX_ARCH_X86_64" OFF)
-cmake_dependent_option(HAVE_SSE4_1 "SSE4_1 extensions" ON "VPX_ARCH_X86 OR VPX_ARCH_X86_64" OFF)
-cmake_dependent_option(HAVE_AVX "AVX extensions" ON "VPX_ARCH_X86 OR VPX_ARCH_X86_64" OFF)
-cmake_dependent_option(HAVE_AVX2 "AVX2 extensions" ON "VPX_ARCH_X86 OR VPX_ARCH_X86_64" OFF)
-cmake_dependent_option(HAVE_AVX512 "AVX512 extensions" ON "VPX_ARCH_X86 OR VPX_ARCH_X86_64" OFF)
+cmake_dependent_option(HAVE_MMX "MMX extensions" ON "VPX_ARCH_X86 OR VPX_ARCH_X86_64;WITH_SIMD" OFF)
+cmake_dependent_option(HAVE_SSE "SSE extensions" ON "VPX_ARCH_X86 OR VPX_ARCH_X86_64;WITH_SIMD" OFF)
+cmake_dependent_option(HAVE_SSE2 "SSE2 extensions" ON "VPX_ARCH_X86 OR VPX_ARCH_X86_64;WITH_SIMD" OFF)
+cmake_dependent_option(HAVE_SSE3 "SSE3 extensions" ON "VPX_ARCH_X86 OR VPX_ARCH_X86_64;WITH_SIMD" OFF)
+cmake_dependent_option(HAVE_SSSE3 "SSSE3 extensions" ON "VPX_ARCH_X86 OR VPX_ARCH_X86_64;WITH_SIMD" OFF)
+cmake_dependent_option(HAVE_SSE4_1 "SSE4_1 extensions" ON "VPX_ARCH_X86 OR VPX_ARCH_X86_64;WITH_SIMD" OFF)
+cmake_dependent_option(HAVE_AVX "AVX extensions" ON "VPX_ARCH_X86 OR VPX_ARCH_X86_64;WITH_SIMD" OFF)
+cmake_dependent_option(HAVE_AVX2 "AVX2 extensions" ON "VPX_ARCH_X86 OR VPX_ARCH_X86_64;WITH_SIMD" OFF)
+cmake_dependent_option(HAVE_AVX512 "AVX512 extensions" ON "VPX_ARCH_X86 OR VPX_ARCH_X86_64;WITH_SIMD" OFF)
 
-cmake_dependent_option(HAVE_VSX "VSX extensions" ON "VPX_ARCH_PPC" OFF)
+cmake_dependent_option(HAVE_VSX "VSX extensions" ON "VPX_ARCH_PPC;WITH_SIMD" OFF)
 
-cmake_dependent_option(HAVE_MSA "MSA extensions" ON "VPX_ARCH_MIPS" OFF)
+cmake_dependent_option(HAVE_MSA "MSA extensions" ON "VPX_ARCH_MIPS;WITH_SIMD" OFF)
 
 if(HAVE_NEON_ASM)
     set(ADS2GAL_PL "${LIBVPX_SRC_DIR}/build/make/ads2gas.pl")
