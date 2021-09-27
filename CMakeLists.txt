@@ -124,6 +124,10 @@ cmake_dependent_option(CONFIG_VP9_TEMPORAL_DENOISING "VP9 temporal denoising" OF
 
 cmake_dependent_option(CONFIG_STATIC_MSVCRT "Static MSVC runtime" ON "MSVC" OFF)
 
+if(CONFIG_STATIC_MSVCRT)
+    set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+endif()
+
 if(NOT BUILD_SHARED_LIBS)
     set(CONFIG_STATIC 1)
 endif()
@@ -263,6 +267,13 @@ function(asm_generate)
 		DEPENDS ${ASM_INPUT} ${ASM_SCRIPT}
         WORKING_DIRECTORY "${LIBVPX_BIN_DIR}")
 endfunction()
+
+# compiler-specific flags
+
+if(WIN32)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_UNICODE")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -D_CRT_SECURE_NO_WARNINGS")
+endif()
 
 # define "restrict" and "inline" keywords used by compiler
 
@@ -418,8 +429,7 @@ set(LIBVPX_PORTS_SOURCES
     "${LIBVPX_PORTS_SRC_DIR}/msvc.h"
     "${LIBVPX_PORTS_SRC_DIR}/static_assert.h"
     "${LIBVPX_PORTS_SRC_DIR}/system_state.h"
-    "${LIBVPX_PORTS_SRC_DIR}/vpx_timer.h"
-    )
+    "${LIBVPX_PORTS_SRC_DIR}/vpx_timer.h")
 
 if(VPX_ARCH_X86 AND HAVE_MMX)
     list(APPEND LIBVPX_PORTS_SOURCES
